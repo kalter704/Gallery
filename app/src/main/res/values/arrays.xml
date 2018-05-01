@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="default_categories">
+        <item>IT</item>
+        <item>Android</item>
+        <item>Енот</item>
+    </string-array>
+
+</resources>
