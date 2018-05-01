@@ -3,26 +3,22 @@ package com.yad.vasilii.gallery.presentation.mvp.galleryhost;
 import com.arellomobile.mvp.*;
 import com.yad.vasilii.gallery.domain.*;
 import com.yad.vasilii.gallery.presentation.global.*;
+import com.yad.vasilii.gallery.presentation.mvp.global.*;
 
 import javax.inject.*;
 
-import io.reactivex.disposables.*;
-
 @InjectViewState
-public class GalleryHostPresenter extends MvpPresenter<GalleryHostView> {
+public class GalleryHostPresenter extends BasePresenter<GalleryHostView> {
 
     private GalleryHostInteractor mGalleryHostInteractor;
 
     private SchedulersProvider mSchedulersProvider;
-
-    private CompositeDisposable mDisposables;
 
     @Inject
     public GalleryHostPresenter(SchedulersProvider schedulersProvider,
             GalleryHostInteractor galleryHostInteractor) {
         mSchedulersProvider = schedulersProvider;
         mGalleryHostInteractor = galleryHostInteractor;
-        mDisposables = new CompositeDisposable();
     }
 
     public void onResume() {
@@ -34,14 +30,8 @@ public class GalleryHostPresenter extends MvpPresenter<GalleryHostView> {
                 .add(mGalleryHostInteractor.getCategories().subscribeOn(mSchedulersProvider.io())
                         .observeOn(mSchedulersProvider.ui()).doOnSubscribe(
                                 (disposable) -> getViewState().showWait("Загрузка данных..."))
-                        .subscribe(categories -> {
-                            getViewState().showFragments(categories);
-                        }));
+                        .subscribe(categories -> getViewState().showFragments(categories),
+                                Throwable::printStackTrace));
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mDisposables.dispose();
-    }
 }

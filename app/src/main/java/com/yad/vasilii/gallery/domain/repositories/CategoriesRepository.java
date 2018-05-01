@@ -10,4 +10,8 @@ public interface CategoriesRepository {
 
     Single<List<Category>> getCategories();
 
+    Completable addCategory(String title);
+
+    Completable deleteCategory(Category category);
+
 }

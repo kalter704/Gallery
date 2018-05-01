@@ -5,4 +5,10 @@
     <string name="first_launch_key">first_launch_key</string>
 
     <string name="database_name">gallery_database</string>
+    <string name="title_activity_settings">Настройка</string>
+
+    <string name="add_button">Добавить</string>
+    <string name="cancel_button">Отмена</string>
+    <string name="input_dialog_title">Добавление катекории</string>
+    <string name="input_dialog_hint">Категория</string>
 </resources>

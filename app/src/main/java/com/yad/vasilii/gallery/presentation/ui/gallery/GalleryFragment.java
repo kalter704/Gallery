@@ -1,4 +1,4 @@
-package com.yad.vasilii.gallery.presentation.ui;
+package com.yad.vasilii.gallery.presentation.ui.gallery;
 
 import com.arellomobile.mvp.*;
 import com.yad.vasilii.gallery.*;

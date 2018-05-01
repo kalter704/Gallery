@@ -23,4 +23,18 @@ public class CategoriesRepositoryImpl implements CategoriesRepository {
     public Single<List<Category>> getCategories() {
         return Single.fromCallable(() -> mDB.categoryDao().getAll());
     }
+
+    @Override
+    public Completable addCategory(String title) {
+        return Completable.fromRunnable(() -> {
+            Category category = new Category();
+            category.setTitle(title);
+            mDB.categoryDao().insert(category);
+        });
+    }
+
+    @Override
+    public Completable deleteCategory(Category category) {
+        return Completable.fromRunnable(() -> mDB.categoryDao().delete(category));
+    }
 }

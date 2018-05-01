@@ -1,4 +1,6 @@
-package com.yad.vasilii.gallery.presentation.ui;
+package com.yad.vasilii.gallery.presentation.ui.galleryhost;
+
+import com.yad.vasilii.gallery.presentation.ui.gallery.*;
 
 import android.support.annotation.*;
 import android.support.v4.app.*;

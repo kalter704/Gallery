@@ -1,4 +1,4 @@
-package com.yad.vasilii.gallery.presentation.ui;
+package com.yad.vasilii.gallery.presentation.ui.galleryhost;
 
 import com.arellomobile.mvp.*;
 import com.arellomobile.mvp.presenter.*;
@@ -6,7 +6,10 @@ import com.yad.vasilii.gallery.R;
 import com.yad.vasilii.gallery.di.*;
 import com.yad.vasilii.gallery.global.*;
 import com.yad.vasilii.gallery.presentation.mvp.galleryhost.*;
+import com.yad.vasilii.gallery.presentation.ui.gallery.*;
+import com.yad.vasilii.gallery.presentation.ui.settings.*;
 
+import android.content.*;
 import android.os.*;
 import android.support.design.widget.*;
 import android.support.v4.view.*;
@@ -63,17 +66,16 @@ public class GalleryHostActivity extends MvpAppCompatActivity implements Gallery
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO
         getMenuInflater().inflate(com.yad.vasilii.gallery.R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
