@@ -3,8 +3,6 @@ package com.yad.vasilii.gallery.domain;
 import com.yad.vasilii.gallery.data.roomdatabase.models.*;
 import com.yad.vasilii.gallery.domain.repositories.*;
 
-import android.text.*;
-
 import java.util.*;
 
 import javax.inject.*;
@@ -25,7 +23,7 @@ public class SettingsInteractor {
     }
 
     public Single<List<Category>> addCategory(String title) {
-        if (TextUtils.isEmpty(title)) {
+        if (title == null || title.length() == 0) {
             return mCategoriesRepository.getCategories();
         }
         return mCategoriesRepository.addCategory(title).toSingleDefault(true)
