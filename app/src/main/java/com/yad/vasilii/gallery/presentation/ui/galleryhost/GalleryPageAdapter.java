@@ -7,7 +7,7 @@ import android.support.v4.app.*;
 
 import java.util.*;
 
-public class GalleryPageAdapter extends FragmentPagerAdapter {
+public class GalleryPageAdapter extends FragmentStatePagerAdapter {
 
     private List<GalleryFragment> mFragments;
 
@@ -50,18 +50,5 @@ public class GalleryPageAdapter extends FragmentPagerAdapter {
         mTitles = titles;
         notifyDataSetChanged();
     }
-
-//    public void addFragments(List<GalleryFragment> fragments) {
-//        mFragments.addAll(fragments);
-//    }
-//
-//    public void clear() {
-//        mFragments.clear();
-//    }
-//
-//    public void showFragments(List<GalleryFragment> fragments) {
-//        mFragments.clear();
-//        mFragments.addAll(fragments);
-//    }
 
 }

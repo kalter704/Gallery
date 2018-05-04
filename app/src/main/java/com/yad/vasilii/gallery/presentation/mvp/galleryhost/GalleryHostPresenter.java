@@ -21,6 +21,11 @@ public class GalleryHostPresenter extends BasePresenter<GalleryHostView> {
         mGalleryHostInteractor = galleryHostInteractor;
     }
 
+    @Override
+    protected void onFirstViewAttach() {
+        loadCategories();
+    }
+
     public void onResume() {
         loadCategories();
     }

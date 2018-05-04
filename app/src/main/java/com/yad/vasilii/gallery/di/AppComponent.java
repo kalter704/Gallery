@@ -15,4 +15,6 @@ public interface AppComponent {
 
     CategoriesRepository getCategoriesRepository();
 
+    ImagesRepository getImagesRepository();
+
 }

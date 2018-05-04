@@ -30,8 +30,6 @@ public class GalleryHostActivity extends MvpAppCompatActivity implements Gallery
     @InjectPresenter
     GalleryHostPresenter mPresenter;
 
-    private GalleryPageAdapter mGalleryPagerAdapter;
-
     private List<GalleryFragment> mPages;
 
     @ProvidePresenter
@@ -49,10 +47,6 @@ public class GalleryHostActivity extends MvpAppCompatActivity implements Gallery
         ButterKnife.bind(this);
 
         setSupportActionBar(findViewById(R.id.toolbar));
-
-        mGalleryPagerAdapter = new GalleryPageAdapter(getSupportFragmentManager());
-
-        mViewPager.setAdapter(mGalleryPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -86,7 +80,6 @@ public class GalleryHostActivity extends MvpAppCompatActivity implements Gallery
     @Override
     public void showFragments(List<String> fragmentsTitles) {
         setFragmentsToViewPager(fragmentsTitles);
-        updateTabs();
     }
 
     @Override
@@ -99,9 +92,6 @@ public class GalleryHostActivity extends MvpAppCompatActivity implements Gallery
         for (String title : fragmentsTitles) {
             mPages.add(GalleryFragment.newInstance(title));
         }
-        mGalleryPagerAdapter.setFragments(mPages, fragmentsTitles);
-    }
-
-    private void updateTabs() {
+        mViewPager.setAdapter(new GalleryPageAdapter(getSupportFragmentManager(), mPages, fragmentsTitles));
     }
 }

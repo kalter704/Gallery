@@ -22,6 +22,12 @@ public class AppModule {
 
     @Singleton
     @Provides
+    Context provideContext() {
+        return mContext.getApplicationContext();
+    }
+
+    @Singleton
+    @Provides
     GalleryDatabase provideGalleryDatabase() {
         return Room.databaseBuilder(mContext, GalleryDatabase.class,
                 mContext.getString(R.string.database_name)).build();

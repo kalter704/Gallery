@@ -1,21 +1,49 @@
 package com.yad.vasilii.gallery.presentation.ui.gallery;
 
 import com.arellomobile.mvp.*;
-import com.yad.vasilii.gallery.*;
+import com.arellomobile.mvp.presenter.*;
+import com.yad.vasilii.gallery.R;
+import com.yad.vasilii.gallery.di.*;
+import com.yad.vasilii.gallery.domain.models.*;
+import com.yad.vasilii.gallery.global.*;
+import com.yad.vasilii.gallery.presentation.mvp.gallery.*;
 
 import android.os.*;
+import android.support.v7.widget.*;
+import android.util.*;
 import android.view.*;
-import android.widget.*;
 
-public class GalleryFragment extends MvpAppCompatFragment {
+import java.util.*;
+
+import butterknife.*;
+
+public class GalleryFragment extends MvpAppCompatFragment implements GalleryView {
 
     private static final String ARG_TITLE = "arg_title";
 
+    private static final int DEFAULT_IMAGE_WIDTH = 150; // dp
+
     private String mTitle;
 
-//    private OnFragmentInteractionListener mListener;
+    @BindView(R.id.gallery_recycler_view)
+    RecyclerView mRecyclerView;
 
-    public GalleryFragment() {}
+    private GalleryRecyclerAdapter mGalleryRecyclerAdapter;
+
+    @InjectPresenter
+    GalleryPresenter mPresenter;
+
+    @ProvidePresenter
+    GalleryPresenter provideGalleryPresenter() {
+        AppComponent appComponent = ((GalleryApplication) getContext().getApplicationContext())
+                .getAppComponent();
+        return DaggerGalleryPresenterComponent.builder().appComponent(appComponent)
+                .galleryModule(new GalleryModule(getArguments().getString(ARG_TITLE))).build()
+                .getGalleryPresenter();
+    }
+
+    public GalleryFragment() {
+    }
 
     public static GalleryFragment newInstance(String title) {
         GalleryFragment fragment = new GalleryFragment();
@@ -29,38 +57,70 @@ public class GalleryFragment extends MvpAppCompatFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-             mTitle = getArguments().getString(ARG_TITLE);
+            mTitle = getArguments().getString(ARG_TITLE);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        ((TextView) view.findViewById(R.id.title)).setText(mTitle);
+
+        ButterKnife.bind(this, view);
+
+        mGalleryRecyclerAdapter = new GalleryRecyclerAdapter(true);
+
+        int screenWidth = getScreenWidthDP();
+        int columns = getColumns(screenWidth);
+        int imageHeightXP = getRealImageWidthXP(screenWidth, columns);
+
+        mGalleryRecyclerAdapter.setImageHeight(imageHeightXP);
+        mGalleryRecyclerAdapter.setOnLoadMoreListener(() -> {
+            mPresenter.onLoadMore();
+        });
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), columns);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return mGalleryRecyclerAdapter.isPositionFooter(position) ?
+                        gridLayoutManager.getSpanCount() : 1;
+            }
+        });
+
+        mRecyclerView.setAdapter(mGalleryRecyclerAdapter);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+
+        mPresenter.onCreateView();
+
         return view;
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
 
     public String getTitle() {
         return mTitle;
     }
 
-//    public interface OnFragmentInteractionListener {
-//        void onFragmentInteraction(Uri uri);
-//    }
+    @Override
+    public void showImages(List<Image> images) {
+        mGalleryRecyclerAdapter.addImages(images);
+    }
+
+    private int getScreenWidthDP() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return (int) (displayMetrics.widthPixels / displayMetrics.density);
+    }
+
+    private int getColumns(int screenWidth) {
+        return screenWidth / DEFAULT_IMAGE_WIDTH;
+    }
+
+    private int getRealImageWidthXP(int screenWidthDP, int columns) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return (int) ((float) screenWidthDP * displayMetrics.density / columns);
+    }
+
 }
