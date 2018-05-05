@@ -9,7 +9,7 @@ import java.util.*;
 @Dao
 public interface CategoryDao {
 
-    @Query("SELECT * FROM category")
+    @Query("SELECT * FROM Category")
     List<Category> getAll();
 
     @Insert
