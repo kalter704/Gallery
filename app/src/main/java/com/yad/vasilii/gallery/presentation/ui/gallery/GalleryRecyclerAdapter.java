@@ -27,7 +27,9 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
 
     private boolean mWithFooter;
 
-    private OnLoadMoreListener mListener;
+    private OnLoadMoreListener mLoadMoreListener;
+
+    private OnItemClickListener mOnItemClickListener;
 
     public GalleryRecyclerAdapter() {
         init();
@@ -59,7 +61,7 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_gallery_list, parent, false);
             view.setLayoutParams(layoutParams);
-            return new GalleryViewHolder(view);
+            return new GalleryViewHolder(view, mOnItemClickListener);
         }
     }
 
@@ -68,8 +70,9 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
         if (getItemViewType(position) == TYPE_ITEM) {
             ((GalleryViewHolder) holder).bind(mImages.get(position));
         }
-        if (position >= (getItemCount() - LOAD_MORE_NUMBER_ITEMS_BEFORE_END) && mListener != null) {
-            mListener.onLoadMore();
+        if (position >= (getItemCount() - LOAD_MORE_NUMBER_ITEMS_BEFORE_END)
+                && mLoadMoreListener != null) {
+            mLoadMoreListener.onLoadMore();
         }
     }
 
@@ -91,7 +94,11 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {
-        mListener = listener;
+        mLoadMoreListener = listener;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mOnItemClickListener = listener;
     }
 
     public void setWithFooter(boolean withFooter) {
@@ -116,9 +123,15 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
         @BindView(R.id.image)
         ImageView mImageView;
 
-        public GalleryViewHolder(View itemView) {
+        public GalleryViewHolder(View itemView, OnItemClickListener clickListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener((v) -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && clickListener != null) {
+                    clickListener.onClick(getAdapterPosition());
+                }
+            });
         }
 
         public void bind(Image image) {
@@ -136,6 +149,12 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
     public interface OnLoadMoreListener {
 
         void onLoadMore();
+
+    }
+
+    public interface OnItemClickListener {
+
+        void onClick(int position);
 
     }
 }

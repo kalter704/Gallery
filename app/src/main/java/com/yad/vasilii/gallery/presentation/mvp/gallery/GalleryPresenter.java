@@ -38,13 +38,12 @@ public class GalleryPresenter extends BasePresenter<GalleryView> {
         mImages = new ArrayList<>();
     }
 
-    @Override
-    protected void onFirstViewAttach() {
-        loadMore();
-    }
-
     public void onCreateView() {
-        getViewState().showImages(mImages);
+        if (mImages.size() != 0) {
+            getViewState().showImages(mImages);
+        } else {
+            loadMore();
+        }
     }
 
     public void onLoadMore() {

@@ -7,6 +7,7 @@ import com.yad.vasilii.gallery.di.*;
 import com.yad.vasilii.gallery.domain.models.*;
 import com.yad.vasilii.gallery.global.*;
 import com.yad.vasilii.gallery.presentation.mvp.gallery.*;
+import com.yad.vasilii.gallery.presentation.ui.imageview.*;
 
 import android.os.*;
 import android.support.v7.widget.*;
@@ -30,16 +31,24 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
 
     private GalleryRecyclerAdapter mGalleryRecyclerAdapter;
 
-    @InjectPresenter
+    @InjectPresenter(type = PresenterType.GLOBAL)
     GalleryPresenter mPresenter;
 
-    @ProvidePresenter
+    @ProvidePresenterTag(presenterClass = GalleryPresenter.class, type = PresenterType.GLOBAL)
+    String provideGalleryPresenterTag() {
+        return getTitleArg();
+    }
+
+    @ProvidePresenter(type = PresenterType.GLOBAL)
     GalleryPresenter provideGalleryPresenter() {
         AppComponent appComponent = ((GalleryApplication) getContext().getApplicationContext())
                 .getAppComponent();
         return DaggerGalleryPresenterComponent.builder().appComponent(appComponent)
-                .galleryModule(new GalleryModule(getArguments().getString(ARG_TITLE))).build()
-                .getGalleryPresenter();
+                .galleryModule(new GalleryModule(getTitleArg())).build().getGalleryPresenter();
+    }
+
+    private String getTitleArg() {
+        return getArguments().getString(ARG_TITLE);
     }
 
     public GalleryFragment() {
@@ -75,9 +84,8 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
         int imageHeightXP = getRealImageWidthXP(screenWidth, columns);
 
         mGalleryRecyclerAdapter.setImageHeight(imageHeightXP);
-        mGalleryRecyclerAdapter.setOnLoadMoreListener(() -> {
-            mPresenter.onLoadMore();
-        });
+        mGalleryRecyclerAdapter.setOnLoadMoreListener(() -> mPresenter.onLoadMore());
+        mGalleryRecyclerAdapter.setOnItemClickListener(this::startImageViewActivity);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), columns);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -97,6 +105,9 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
         return view;
     }
 
+    private void startImageViewActivity(int position) {
+        startActivity(ImageViewActivity.createIntent(getContext(), mTitle, position));
+    }
 
     public String getTitle() {
         return mTitle;

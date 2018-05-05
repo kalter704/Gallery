@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.yad.vasilii.gallery">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:name=".global.GalleryApplication"
@@ -28,6 +28,14 @@
                 android:label="@string/title_activity_settings"
                 android:parentActivityName=".presentation.ui.galleryhost.GalleryHostActivity"
                 android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.yad.vasilii.gallery.presentation.ui.galleryhost.GalleryHostActivity"/>
+        </activity>
+        <activity
+                android:name=".presentation.ui.imageview.ImageViewActivity"
+                android:parentActivityName=".presentation.ui.galleryhost.GalleryHostActivity"
+                android:theme="@style/AppTheme.NoActionBar.BlackAppTheme">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.yad.vasilii.gallery.presentation.ui.galleryhost.GalleryHostActivity"/>
