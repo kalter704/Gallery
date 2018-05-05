@@ -2,9 +2,9 @@
 <resources>
 
     <string-array name="default_categories">
-        <item>IT</item>
-        <item>Android</item>
-        <item>Енот</item>
+        <item>Апельсин</item>
+        <item>Лето</item>
+        <item>Море</item>
     </string-array>
 
 </resources>
