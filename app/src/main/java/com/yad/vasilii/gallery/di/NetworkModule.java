@@ -7,6 +7,7 @@ import com.yad.vasilii.gallery.data.network.*;
 import com.yad.vasilii.gallery.data.network.interceptor.*;
 
 import android.content.*;
+import android.os.*;
 
 import java.util.*;
 
@@ -23,15 +24,19 @@ import retrofit2.converter.gson.*;
 public class NetworkModule {
 
     private OkHttpClient createClient(Interceptor... interceptors) {
-        ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                .tlsVersions(TlsVersion.TLS_1_2)
-                .cipherSuites(
-                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-                        CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
-                ).build();
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectionSpecs(Collections.singletonList(spec));
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                    .tlsVersions(TlsVersion.TLS_1_2)
+                    .cipherSuites(
+                            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                            CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+                    ).build();
+                builder.connectionSpecs(Collections.singletonList(spec));
+        }
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(
                     new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
