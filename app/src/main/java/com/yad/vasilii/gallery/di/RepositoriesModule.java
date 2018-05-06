@@ -1,5 +1,6 @@
 package com.yad.vasilii.gallery.di;
 
+import com.yad.vasilii.gallery.data.*;
 import com.yad.vasilii.gallery.data.network.*;
 import com.yad.vasilii.gallery.data.repositories.*;
 import com.yad.vasilii.gallery.data.roomdatabase.*;
@@ -20,8 +21,13 @@ public class RepositoriesModule {
 
     @Singleton
     @Provides
-    ImagesRepository provideImagesRepository(PixabayApiService pixabayApiService) {
-        return new ImagesRepositoryImpl(pixabayApiService);
+    ImagesRepository provideImagesRepository(PixabayApiService pixabayApiService,
+            GalleryDatabase gdb, CalendarManager cm) {
+        return new ImagesWithCacheRepositoryImpl(
+                new ImagesRepositoryImpl(pixabayApiService),
+                gdb,
+                cm
+        );
     }
 
 }

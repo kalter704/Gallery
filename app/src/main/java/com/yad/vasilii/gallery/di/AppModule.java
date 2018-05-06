@@ -1,6 +1,7 @@
 package com.yad.vasilii.gallery.di;
 
 import com.yad.vasilii.gallery.R;
+import com.yad.vasilii.gallery.data.*;
 import com.yad.vasilii.gallery.data.roomdatabase.*;
 import com.yad.vasilii.gallery.presentation.global.*;
 
@@ -37,6 +38,12 @@ public class AppModule {
     @Provides
     SchedulersProvider provideSchedulersProvider() {
         return new SchedulersProvider();
+    }
+
+    @Singleton
+    @Provides
+    CalendarManager provideCalendarManager() {
+        return new CalendarManager();
     }
 
 }
