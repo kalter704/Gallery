@@ -1,4 +1,4 @@
-package com.yad.vasilii.gallery.di.ImageView;
+package com.yad.vasilii.gallery.di.imageview;
 
 import com.yad.vasilii.gallery.di.*;
 import com.yad.vasilii.gallery.di.scopes.*;

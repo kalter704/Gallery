@@ -4,7 +4,7 @@ import com.arellomobile.mvp.*;
 import com.arellomobile.mvp.presenter.*;
 import com.yad.vasilii.gallery.R;
 import com.yad.vasilii.gallery.di.*;
-import com.yad.vasilii.gallery.di.ImageView.*;
+import com.yad.vasilii.gallery.di.imageview.*;
 import com.yad.vasilii.gallery.di.gallery.*;
 import com.yad.vasilii.gallery.domain.models.*;
 import com.yad.vasilii.gallery.global.*;
