@@ -55,6 +55,11 @@ public class GalleryPresenter extends BasePresenter<GalleryView> {
             return;
         }
         isLoading = true;
+        try {
+            getViewState().showLoading();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mDisposables.add(mGalleryInteractor.getImages(mQuery, mPage, ON_THE_PAGE)
                 .subscribeOn(mSchedulersProvider.io()).observeOn(mSchedulersProvider.ui())
                 .subscribe(this::successLoad, this::handleError));
@@ -70,6 +75,11 @@ public class GalleryPresenter extends BasePresenter<GalleryView> {
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         isLoading = false;
+        if (mImages.size() != 0) {
+            getViewState().showMessageNoNetwork();
+        } else {
+            getViewState().showBigMessageNoNetwork();
+        }
     }
 
 }

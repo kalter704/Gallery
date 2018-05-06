@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_try_again_height"
+        android:gravity="center"
+        android:background="@color/item_try_again_background">
+
+    <ImageView
+            android:layout_width="@dimen/item_try_again_image_width_height"
+            android:layout_height="@dimen/item_try_again_image_width_height"
+            android:src="@drawable/no_connection"/>
+
+    <Button
+            android:layout_marginLeft="@dimen/item_try_again_dist_between_elem"
+            android:id="@+id/try_again"
+            android:text="@string/try_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

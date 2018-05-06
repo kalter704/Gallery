@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/layout_try_again"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+        <ImageView
+                android:layout_marginTop="@dimen/try_again_padding_top"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/try_again_image_height"
+                android:src="@drawable/no_connection"/>
+
+        <TextView
+                android:textSize="@dimen/try_again_text_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_connection"/>
+
+        <Button
+                android:id="@+id/try_again"
+                android:layout_marginTop="@dimen/try_again_button_margin"
+                android:layout_marginBottom="@dimen/try_again_button_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/try_again"/>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

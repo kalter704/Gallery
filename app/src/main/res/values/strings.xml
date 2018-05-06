@@ -12,6 +12,8 @@
     <string name="input_dialog_title">Добавление катекории</string>
     <string name="input_dialog_hint">Категория</string>
 
+    <string name="no_connection">Нет соединения с интернетом</string>
+    <string name="try_again">Попробовать еще раз</string>
 
     <string name="api_key">8640012-e7f1d104e374c3c21483e8445</string>
 </resources>

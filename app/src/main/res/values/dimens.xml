@@ -8,8 +8,18 @@
     <dimen name="height_list_item">48dp</dimen>
     <dimen name="size_text_list_item">16sp</dimen>
     <dimen name="horizontal_margin_list_item">16dp</dimen>
+
     <dimen name="input_dialog_padding">24dp</dimen>
     <dimen name="input_dialog_title_text_size">20sp</dimen>
     <dimen name="input_dialog_margin_between_content">20dp</dimen>
     <dimen name="input_dialog_margin_bottom">10dp</dimen>
+
+    <dimen name="item_try_again_height">85dp</dimen>
+    <dimen name="item_try_again_image_width_height">50dp</dimen>
+    <dimen name="item_try_again_dist_between_elem">36dp</dimen>
+
+    <dimen name="try_again_padding_top">50dp</dimen>
+    <dimen name="try_again_image_height">150dp</dimen>
+    <dimen name="try_again_text_size">18sp</dimen>
+    <dimen name="try_again_button_margin">8dp</dimen>
 </resources>

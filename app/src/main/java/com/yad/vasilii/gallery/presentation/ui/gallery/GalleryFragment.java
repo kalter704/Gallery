@@ -12,9 +12,11 @@ import com.yad.vasilii.gallery.presentation.mvp.gallery.*;
 import com.yad.vasilii.gallery.presentation.ui.imageview.*;
 
 import android.os.*;
+import android.support.v4.widget.*;
 import android.support.v7.widget.*;
 import android.util.*;
 import android.view.*;
+import android.widget.*;
 
 import java.util.*;
 
@@ -32,6 +34,12 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
 
     @BindView(R.id.gallery_recycler_view)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.layout_try_again)
+    NestedScrollView mLayoutTryAgain;
+
+    @BindView(R.id.try_again)
+    Button mTryAgain;
 
     private GalleryRecyclerAdapter mGalleryRecyclerAdapter;
 
@@ -109,6 +117,8 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
+        mTryAgain.setOnClickListener((v) -> mPresenter.onLoadMore());
+
         mPresenter.onCreateView();
 
         return view;
@@ -127,6 +137,22 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
         mGalleryRecyclerAdapter.addImages(images);
     }
 
+    @Override
+    public void showBigMessageNoNetwork() {
+        showNoNetwork();
+    }
+
+    @Override
+    public void showMessageNoNetwork() {
+        mGalleryRecyclerAdapter.showNoNetwork();
+    }
+
+    @Override
+    public void showLoading() {
+        mGalleryRecyclerAdapter.showLoading();
+        showRecyclerView();
+    }
+
     private int getScreenWidthDP() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -143,4 +169,13 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
         return (int) ((float) screenWidthDP * displayMetrics.density / columns);
     }
 
+    private void showNoNetwork() {
+        mLayoutTryAgain.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+    }
+
+    private void showRecyclerView() {
+        mLayoutTryAgain.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
 }

@@ -102,6 +102,21 @@ public class ImageViewActivity extends MvpAppCompatActivity implements GalleryVi
     }
 
     @Override
+    public void showBigMessageNoNetwork() {
+
+    }
+
+    @Override
+    public void showMessageNoNetwork() {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
     public void showPage(int page) {
         mViewPager.setCurrentItem(page);
     }

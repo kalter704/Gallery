@@ -11,4 +11,10 @@ public interface GalleryView extends MvpView {
 
     void showImages(List<Image> images);
 
+    void showBigMessageNoNetwork();
+
+    void showMessageNoNetwork();
+
+    void showLoading();
+
 }

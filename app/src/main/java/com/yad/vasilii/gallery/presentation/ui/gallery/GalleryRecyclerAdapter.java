@@ -17,7 +17,9 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
 
     private final int TYPE_ITEM = 1;
 
-    private final int TYPE_FOOTER = 2;
+    private final int TYPE_LOADING = 2;
+
+    private final int TYPE_ERROR = 3;
 
     private final int LOAD_MORE_NUMBER_ITEMS_BEFORE_END = 7;
 
@@ -26,6 +28,8 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
     private int mImageHeight;
 
     private boolean mWithFooter;
+
+    private boolean mError;
 
     private final Picasso mPicasso;
 
@@ -47,6 +51,7 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
     private void init() {
         mImages = new ArrayList<>();
         mWithFooter = false;
+        mError = false;
         mImageHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
     }
 
@@ -54,17 +59,14 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, mImageHeight);
-        if (viewType == TYPE_FOOTER) {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_load_more, parent, false);
-            view.setLayoutParams(layoutParams);
+        if (viewType == TYPE_LOADING) {
+            view = inflateView(parent, R.layout.item_list_load_more, mImageHeight);
             return new LoadMoreViewHolder(view);
+        } else if (viewType == TYPE_ERROR) {
+            view = inflateView(parent, R.layout.item_try_again);
+            return new ErrorViewHolder(view, mLoadMoreListener);
         } else {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_gallery_list, parent, false);
-            view.setLayoutParams(layoutParams);
+            view = inflateView(parent, R.layout.item_gallery_list, mImageHeight);
             return new GalleryViewHolder(view, mOnItemClickListener, mPicasso);
         }
     }
@@ -75,7 +77,7 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
             ((GalleryViewHolder) holder).bind(mImages.get(position));
         }
         if (position >= (getItemCount() - LOAD_MORE_NUMBER_ITEMS_BEFORE_END)
-                && mLoadMoreListener != null) {
+                && mLoadMoreListener != null && !mError) {
             mLoadMoreListener.onLoadMore();
         }
     }
@@ -92,9 +94,27 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         if (mWithFooter && isPositionFooter(position)) {
-            return TYPE_FOOTER;
+            if (mError) {
+                return TYPE_ERROR;
+            } else {
+                return TYPE_LOADING;
+            }
         }
         return TYPE_ITEM;
+    }
+
+    private View inflateView(ViewGroup parent, @LayoutRes int layout) {
+        return LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+    }
+
+    private View inflateView(ViewGroup parent, @LayoutRes int layout, int height) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, height);
+        view.setLayoutParams(layoutParams);
+
+        return view;
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {
@@ -122,6 +142,16 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
         mImageHeight = imageHeight;
     }
 
+    public void showNoNetwork() {
+        mError = true;
+        notifyDataSetChanged();
+    }
+
+    public void showLoading() {
+        mError = false;
+        notifyDataSetChanged();
+    }
+
     public class GalleryViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.image)
@@ -129,7 +159,8 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
 
         private final Picasso mPicasso;
 
-        public GalleryViewHolder(View itemView, OnItemClickListener clickListener, Picasso picasso) {
+        public GalleryViewHolder(View itemView, OnItemClickListener clickListener,
+                Picasso picasso) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener((v) -> {
@@ -150,6 +181,22 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
 
         public LoadMoreViewHolder(View itemView) {
             super(itemView);
+        }
+    }
+
+    public class ErrorViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.try_again)
+        Button mTryAgain;
+
+        public ErrorViewHolder(View itemView, OnLoadMoreListener loadMoreListener) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            mTryAgain.setOnClickListener((v) -> {
+                if (loadMoreListener != null) {
+                    loadMoreListener.onLoadMore();
+                }
+            });
         }
     }
 
