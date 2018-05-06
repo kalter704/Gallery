@@ -60,7 +60,7 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == TYPE_LOADING) {
-            view = inflateView(parent, R.layout.item_list_load_more, mImageHeight);
+            view = inflateView(parent, R.layout.item_list_load_more);
             return new LoadMoreViewHolder(view);
         } else if (viewType == TYPE_ERROR) {
             view = inflateView(parent, R.layout.item_try_again);
@@ -173,7 +173,10 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
         }
 
         public void bind(Image image) {
-            mPicasso.load(image.getPreviewImageUrl()).into(mImageView);
+            mPicasso.load(image.getPreviewImageUrl())
+                    .placeholder(R.drawable.ic_wallpaper)
+                    .error(R.drawable.ic_error_outline)
+                    .into(mImageView);
         }
     }
 

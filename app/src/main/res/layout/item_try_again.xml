@@ -3,12 +3,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_try_again_height"
+        android:layout_height="@dimen/item_footer_height"
         android:gravity="center"
         android:background="@color/item_try_again_background">
 
     <ImageView
-            android:layout_width="@dimen/item_try_again_image_width_height"
+            android:layout_width="@dimen/item_loading_more_progress_width_height"
             android:layout_height="@dimen/item_try_again_image_width_height"
             android:src="@drawable/no_connection"/>
 

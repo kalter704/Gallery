@@ -113,9 +113,12 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
             }
         });
 
+        int dividerWidth = (int) getActivity().getResources().getDimension(R.dimen.recycle_divider_width);
+
         mRecyclerView.setAdapter(mGalleryRecyclerAdapter);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(dividerWidth));
 
         mTryAgain.setOnClickListener((v) -> mPresenter.onLoadMore());
 

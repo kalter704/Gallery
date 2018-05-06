@@ -48,7 +48,7 @@ public class ImageViewFragment extends Fragment {
 
         ImageView imageView = view.findViewById(R.id.image_view);
 
-        mPicasso.load(mImageUrl).into(imageView);
+        mPicasso.load(mImageUrl).placeholder(R.drawable.ic_wallpaper).error(R.drawable.ic_error_outline).into(imageView);
 
         return view;
     }

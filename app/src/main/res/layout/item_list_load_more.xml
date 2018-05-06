@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ProgressBar
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/item_footer_height"
+        android:gravity="center">
+
+    <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_loading_more_progress_width_height"/>
+
+</LinearLayout>
