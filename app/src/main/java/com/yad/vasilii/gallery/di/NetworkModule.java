@@ -4,6 +4,7 @@ import com.squareup.picasso.*;
 import com.yad.vasilii.gallery.BuildConfig;
 import com.yad.vasilii.gallery.R;
 import com.yad.vasilii.gallery.data.network.*;
+import com.yad.vasilii.gallery.data.network.interceptor.*;
 
 import android.content.*;
 
@@ -21,7 +22,7 @@ import retrofit2.converter.gson.*;
 @Module(includes = {AppModule.class})
 public class NetworkModule {
 
-    private OkHttpClient createClient(ApiKeyInterceptor apiKeyInterceptor) {
+    private OkHttpClient createClient(Interceptor... interceptors) {
         ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)
                 .cipherSuites(
@@ -36,7 +37,9 @@ public class NetworkModule {
                     new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
 
         }
-        builder.addInterceptor(apiKeyInterceptor);
+        for (Interceptor interceptor : interceptors) {
+            builder.addInterceptor(interceptor);
+        }
         return builder.build();
     }
 
@@ -55,14 +58,27 @@ public class NetworkModule {
 
     @Singleton
     @Provides
+    NetworkChecker provideNetworkChecker(Context context) {
+        return new NetworkChecker(context);
+    }
+
+    @Singleton
+    @Provides
     ApiKeyInterceptor provideApiKeyInterceptor(@Named("api_key") String apiKey) {
         return new ApiKeyInterceptor(apiKey);
     }
 
     @Singleton
     @Provides
-    OkHttpClient provideOkHttpClient(ApiKeyInterceptor apiKeyInterceptor) {
-        return createClient(apiKeyInterceptor);
+    NetworkCheckerInterceptor provideNetworkCheckerInterceptor(NetworkChecker networkChecker) {
+        return new NetworkCheckerInterceptor(networkChecker);
+    }
+
+    @Singleton
+    @Provides
+    OkHttpClient provideOkHttpClient(ApiKeyInterceptor apiKeyInterceptor,
+            NetworkCheckerInterceptor networkCheckerInterceptor) {
+        return createClient(apiKeyInterceptor, networkCheckerInterceptor);
     }
 
     @Singleton

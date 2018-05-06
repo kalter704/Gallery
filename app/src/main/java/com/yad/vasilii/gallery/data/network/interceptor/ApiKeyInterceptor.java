@@ -1,4 +1,4 @@
-package com.yad.vasilii.gallery.data.network;
+package com.yad.vasilii.gallery.data.network.interceptor;
 
 import java.io.*;
 
