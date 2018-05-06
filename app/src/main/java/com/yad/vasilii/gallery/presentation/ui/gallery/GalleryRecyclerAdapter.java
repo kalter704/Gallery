@@ -27,16 +27,20 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
 
     private boolean mWithFooter;
 
+    private final Picasso mPicasso;
+
     private OnLoadMoreListener mLoadMoreListener;
 
     private OnItemClickListener mOnItemClickListener;
 
-    public GalleryRecyclerAdapter() {
+    public GalleryRecyclerAdapter(Picasso picasso) {
         init();
+        mPicasso = picasso;
     }
 
-    public GalleryRecyclerAdapter(boolean withFooter) {
+    public GalleryRecyclerAdapter(Picasso picasso, boolean withFooter) {
         init();
+        mPicasso = picasso;
         mWithFooter = withFooter;
     }
 
@@ -61,7 +65,7 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_gallery_list, parent, false);
             view.setLayoutParams(layoutParams);
-            return new GalleryViewHolder(view, mOnItemClickListener);
+            return new GalleryViewHolder(view, mOnItemClickListener, mPicasso);
         }
     }
 
@@ -123,7 +127,9 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
         @BindView(R.id.image)
         ImageView mImageView;
 
-        public GalleryViewHolder(View itemView, OnItemClickListener clickListener) {
+        private final Picasso mPicasso;
+
+        public GalleryViewHolder(View itemView, OnItemClickListener clickListener, Picasso picasso) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener((v) -> {
@@ -132,10 +138,11 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
                     clickListener.onClick(getAdapterPosition());
                 }
             });
+            mPicasso = picasso;
         }
 
         public void bind(Image image) {
-            Picasso.get().load(image.getPreviewImageUrl()).into(mImageView);
+            mPicasso.load(image.getPreviewImageUrl()).into(mImageView);
         }
     }
 

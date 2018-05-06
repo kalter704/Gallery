@@ -2,6 +2,7 @@ package com.yad.vasilii.gallery.presentation.ui.gallery;
 
 import com.arellomobile.mvp.*;
 import com.arellomobile.mvp.presenter.*;
+import com.squareup.picasso.*;
 import com.yad.vasilii.gallery.R;
 import com.yad.vasilii.gallery.di.*;
 import com.yad.vasilii.gallery.di.gallery.*;
@@ -16,6 +17,8 @@ import android.util.*;
 import android.view.*;
 
 import java.util.*;
+
+import javax.inject.*;
 
 import butterknife.*;
 
@@ -48,6 +51,9 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
                 .galleryModule(new GalleryModule(getTitleArg())).build().getGalleryPresenter();
     }
 
+    @Inject
+    Picasso mPicasso;
+
     private String getTitleArg() {
         return getArguments().getString(ARG_TITLE);
     }
@@ -78,7 +84,9 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
 
         ButterKnife.bind(this, view);
 
-        mGalleryRecyclerAdapter = new GalleryRecyclerAdapter(true);
+        ((GalleryApplication) getContext().getApplicationContext()).getAppComponent().inject(this);
+
+        mGalleryRecyclerAdapter = new GalleryRecyclerAdapter(mPicasso, true);
 
         int screenWidth = getScreenWidthDP();
         int columns = getColumns(screenWidth);
