@@ -9,6 +9,7 @@ import java.util.*;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface GalleryView extends MvpView {
 
+    @StateStrategyType(AddToEndStrategy.class)
     void showImages(List<Image> images);
 
     void showBigMessageNoNetwork();

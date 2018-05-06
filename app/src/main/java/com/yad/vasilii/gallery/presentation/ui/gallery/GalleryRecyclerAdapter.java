@@ -138,6 +138,10 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public List<Image> getImages() {
+        return mImages;
+    }
+
     public void setImageHeight(int imageHeight) {
         mImageHeight = imageHeight;
     }

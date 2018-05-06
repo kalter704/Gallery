@@ -22,6 +22,8 @@ import butterknife.*;
 
 public class ImageViewActivity extends MvpAppCompatActivity implements GalleryView, ImageViewer {
 
+    private final int LOAD_MORE_NUMBER_ITEMS_BEFORE_END = 7;
+
     private static final String EXTRA_TITLE = "extra_title";
 
     private static final String EXTRA_POSITION = "extra_position";
@@ -89,16 +91,40 @@ public class ImageViewActivity extends MvpAppCompatActivity implements GalleryVi
         mImageViewPager = new ImageViewPager(getSupportFragmentManager());
         mViewPager.setAdapter(mImageViewPager);
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                    int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position > (mImageViewPager.getCount() - LOAD_MORE_NUMBER_ITEMS_BEFORE_END)) {
+                    mGalleryPresenter.onLoadMore();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         mGalleryPresenter.onCreateView();
     }
 
     @Override
     public void showImages(List<Image> images) {
+        mImageViewPager.addFragments(getImageViewFragments(images));
+    }
+
+    private List<ImageViewFragment> getImageViewFragments(List<Image> images) {
         List<ImageViewFragment> fragments = new ArrayList<>();
         for (Image image : images) {
             fragments.add(ImageViewFragment.newInstance(image.getLargeImageUrl()));
         }
-        mImageViewPager.addFragments(fragments);
+        return fragments;
     }
 
     @Override

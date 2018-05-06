@@ -39,9 +39,7 @@ public class GalleryPresenter extends BasePresenter<GalleryView> {
     }
 
     public void onCreateView() {
-        if (mImages.size() != 0) {
-            getViewState().showImages(mImages);
-        } else {
+        if (mImages.size() == 0) {
             loadMore();
         }
     }
